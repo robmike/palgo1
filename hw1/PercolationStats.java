@@ -1,7 +1,7 @@
 import java.lang.*;
 
 public class PercolationStats {
-    private int results[];
+    private double results[];
     private int gridsize;
     private int nsamples;
 
@@ -12,10 +12,10 @@ public class PercolationStats {
 
         this.gridsize = N;
         this.nsamples = T;
-        this.results = new int[T]; 
+        this.results = new double[T]; 
     }
 
-    private int trial(){
+    private double trial(){
         Percolation perc = new Percolation(this.gridsize);
         int x,y;
         int i;
@@ -26,7 +26,7 @@ public class PercolationStats {
             }while(perc.isOpen(x, y));
             perc.open(x,y);
             if(perc.percolates()){
-                return i;
+                return i/((double) this.gridsize*this.gridsize);
             }
         }
         throw new IndexOutOfBoundsException("Opened all sites, but no percolation (?!)");
