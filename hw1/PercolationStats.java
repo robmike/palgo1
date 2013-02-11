@@ -63,5 +63,10 @@ public class PercolationStats implements PercolationStatsI {
         int T = Integer.parseInt(args[1]);
         PercolationStats ps = new PercolationStats(N,T);
         ps.runtrials();
+        System.out.println("Mean: " + Double.toString(ps.mean()));
+        System.out.println("std: " + Double.toString(ps.stddev()));
+        System.out.println("conflow: " + Double.toString(ps.confidenceLo()));
+        System.out.println("confhi: " + Double.toString(ps.confidenceHi()));
+        System.out.println("avg threshold: " + Double.toString(ps.mean()/N));
     }
 }
