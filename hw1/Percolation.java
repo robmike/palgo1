@@ -17,8 +17,8 @@ public class Percolation {
         this.size = N;
         // Last two values are special sentinals for being connected to top or bottom respectively
         this.uf = new WeightedQuickUnionUF(N*N + 2);
-        this.topidx = N*N - 2;
-        this.bottomidx = N*N - 1;
+        this.topidx = N*N;
+        this.bottomidx = N*N + 1;
     }
 
     private int[] fromlinear(int i){
@@ -40,12 +40,12 @@ public class Percolation {
 
     private void connectToTop(int i, int j)
     {
-       uf.union(tolinear(i-1,j-1), this.size*this.size-2);
+        uf.union(tolinear(i-1,j-1), this.topidx);
     }
 
     private void connectToBottom(int i, int j)
     {
-       uf.union(tolinear(i-1,j-1), this.size*this.size-1);
+        uf.union(tolinear(i-1,j-1), this.bottomidx);
     }
 
     // check if second tuple is open and connect if so
