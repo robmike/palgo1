@@ -12,6 +12,8 @@ public class Percolation implements PercolationI {
     public boolean grid[][];
     private int size;
     private WeightedQuickUnionUF uf;
+    private int topidx;
+    private int bottomidx;
 
     public Percolation(int N) {
         this.grid = new boolean[N][N];
@@ -21,7 +23,10 @@ public class Percolation implements PercolationI {
             }
         }
         this.size = N;
-        this.uf = new WeightedQuickUnionUF(N*N);
+        // Last two values are special sentinals for being connected to top or bottom respectively
+        this.uf = new WeightedQuickUnionUF(N*N + 2);
+        this.topidx = N*N - 2;
+        this.bottomidx = N*N - 1;
     }
 
     public int[] fromlinear(int i){
@@ -41,6 +46,16 @@ public class Percolation implements PercolationI {
         }
     }
 
+    private void connectToTop(int i, int j)
+    {
+       uf.union(tolinear(i-1,j-1), this.size*this.size-2);
+    }
+
+    private void connectToBottom(int i, int j)
+    {
+       uf.union(tolinear(i-1,j-1), this.size*this.size-1);
+    }
+
     // check if second tuple is open and connect if so
     private void connectIfOpen(int i, int j, int x, int y){
         if(isOpen(x,y)){
@@ -55,6 +70,12 @@ public class Percolation implements PercolationI {
         connectIfOpen(i, j, Math.min(i+1,this.size), j);
         connectIfOpen(i, j, i, Math.max(j-1,1));
         connectIfOpen(i, j, i, Math.min(j+1,this.size));
+
+        if(i==1) {
+            connectToTop(i,j);
+        } else if (i==this.size) {
+            connectToBottom(i,j);
+        }
     }
 
     public boolean isOpen(int i, int j) {
@@ -64,20 +85,10 @@ public class Percolation implements PercolationI {
 
     public boolean isFull(int i, int j) {
         validateIdx(i,j);
-        for(int k=0; k<this.size; k++){
-            if(uf.connected(tolinear(i-1,j-1), tolinear(0, k))){
-                return true;
-            }
-        }
-        return false;
+        return uf.connected(tolinear(i-1,j-1), this.topidx);
     }
 
     public boolean percolates() {
-        for(int j=0; j<this.size; j++){
-            if(this.isFull(this.size, j+1)) {
-                return true;
-            }
-        }
-        return false;
+        return uf.connected(this.topidx, this.bottomidx);
     }
 }
