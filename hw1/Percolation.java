@@ -1,15 +1,7 @@
 import java.lang.*;
 
-interface PercolationI {
-    //public Percolation(int N);              // create N-by-N grid, with all sites blocked
-    public void open(int i, int j); // open site (row i, column j) if it is not already
-    public boolean isOpen(int i, int j);    // is site (row i, column j) open?
-    public boolean isFull(int i, int j);    // is site (row i, column j) full?
-    public boolean percolates(); // does the system percolate?
-}
-
-public class Percolation implements PercolationI {
-    public boolean grid[][];
+public class Percolation {
+    private boolean grid[][];
     private int size;
     private WeightedQuickUnionUF uf;
     private int topidx;
@@ -29,14 +21,14 @@ public class Percolation implements PercolationI {
         this.bottomidx = N*N - 1;
     }
 
-    public int[] fromlinear(int i){
+    private int[] fromlinear(int i){
         int[] x = new int[2];
         x[0] = i/this.size;
         x[1] = i % this.size;
         return x;
     }
 
-    public int tolinear(int i, int j){
+    private int tolinear(int i, int j){
         return i*this.size + j;
     }
     
