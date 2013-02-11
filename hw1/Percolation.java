@@ -37,7 +37,7 @@ public class Percolation implements PercolationI {
     
     private void validateIdx(int i, int j){
         if(i < 1 || j < 1 || i > this.size || j > this.size){
-            throw new IndexOutOfBoundsException("error");
+            throw new IndexOutOfBoundsException("error " + Integer.toString(i) + ", " + Integer.toString(j));
         }
     }
 
@@ -51,10 +51,10 @@ public class Percolation implements PercolationI {
     public void open(int i, int j) {
         validateIdx(i,j);
         grid[i-1][j-1] = true;
-        connectIfOpen(i, j, i-1, j);
-        connectIfOpen(i, j, i+1, j);
-        connectIfOpen(i, j, i, j-1);
-        connectIfOpen(i, j, i, j+1);
+        connectIfOpen(i, j, Math.max(i-1,1), j);
+        connectIfOpen(i, j, Math.min(i+1,this.size), j);
+        connectIfOpen(i, j, i, Math.max(j-1,1));
+        connectIfOpen(i, j, i, Math.min(j+1,this.size));
     }
 
     public boolean isOpen(int i, int j) {
