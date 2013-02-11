@@ -15,7 +15,6 @@ public class PercolationStats {
         this.gridsize = N;
         this.nsamples = T;
         this.results = new double[T]; 
-        this.done = false;
         this.runtrials();
     }
 
