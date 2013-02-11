@@ -5,14 +5,18 @@ public class PercolationStats {
     private int gridsize;
     private int nsamples;
 
+    private boolean done;
+
     public PercolationStats(int N, int T) {
         if(N <= 0 || T <= 0){
-            throw new IndexOutOfBoundsException();
+            throw new IllegalArgumentException();
         }
 
         this.gridsize = N;
         this.nsamples = T;
         this.results = new double[T]; 
+        this.done = false;
+        this.runtrials();
     }
 
     private double trial(){
@@ -36,12 +40,15 @@ public class PercolationStats {
         for(int i=0; i<this.nsamples; i++){
             this.results[i] = trial(); 
         }
+        this.done = true;
     }
 
     public double mean() {
         return StdStats.mean(this.results);
     }
-    public double stddev(){ return StdStats.stddev(this.results);}
+    public double stddev(){
+        return StdStats.stddev(this.results);
+    }
 
     public double confidenceLo(){
         return this.mean() - 1.96*this.stddev()/Math.sqrt(this.nsamples);
@@ -53,7 +60,6 @@ public class PercolationStats {
         int N = Integer.parseInt(args[0]);
         int T = Integer.parseInt(args[1]);
         PercolationStats ps = new PercolationStats(N,T);
-        ps.runtrials();
         System.out.println("Mean: " + Double.toString(ps.mean()));
         System.out.println("std: " + Double.toString(ps.stddev()));
         System.out.println("conflow: " + Double.toString(ps.confidenceLo()));

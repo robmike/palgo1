@@ -65,7 +65,8 @@ public class Percolation {
 
         if(i==1) {
             connectToTop(i,j);
-        } else if (i==this.size) {
+        }
+        if (i==this.size) {
             connectToBottom(i,j);
         }
     }
