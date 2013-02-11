@@ -3,9 +3,11 @@ import java.lang.*;
 public class Percolation {
     private boolean grid[][];
     private int size;
-    private WeightedQuickUnionUF uf;
+    private WeightedQuickUnionUF tuf;
+    private WeightedQuickUnionUF buf;
     private int topidx;
     private int bottomidx;
+    private boolean ispercolating;
 
     public Percolation(int N) {
         this.grid = new boolean[N][N];
@@ -15,10 +17,11 @@ public class Percolation {
             }
         }
         this.size = N;
-        // Last two values are special sentinals for being connected to top or bottom respectively
-        this.uf = new WeightedQuickUnionUF(N*N + 2);
+        this.tuf = new WeightedQuickUnionUF(N*N + 1);
         this.topidx = N*N;
-        this.bottomidx = N*N + 1;
+        this.bottomidx = N*N;
+        this.buf = new WeightedQuickUnionUF(N*N + 1);
+        this.ispercolating = false;
     }
 
     private int[] fromlinear(int i){
@@ -40,18 +43,30 @@ public class Percolation {
 
     private void connectToTop(int i, int j)
     {
-        uf.union(tolinear(i-1,j-1), this.topidx);
+        tuf.union(tolinear(i-1,j-1), this.topidx);
     }
 
     private void connectToBottom(int i, int j)
     {
-        uf.union(tolinear(i-1,j-1), this.bottomidx);
+        buf.union(tolinear(i-1,j-1), this.bottomidx);
+    }
+
+    private boolean isConnectedToTop(int i, int j){
+        return tuf.connected(tolinear(i-1,j-1), this.topidx);
+    }
+
+    private boolean isConnectedToBottom(int i, int j){
+        return buf.connected(tolinear(i-1,j-1), this.bottomidx);
     }
 
     // check if second tuple is open and connect if so
     private void connectIfOpen(int i, int j, int x, int y){
         if(isOpen(x,y)){
-            uf.union(tolinear(i-1,j-1), tolinear(x-1,y-1));
+            tuf.union(tolinear(i-1,j-1), tolinear(x-1,y-1));
+            buf.union(tolinear(i-1,j-1), tolinear(x-1,y-1));
+        }
+        if(!this.ispercolating && isConnectedToBottom(i,j) && isConnectedToTop(i,j)){
+            this.ispercolating = true;
         }
     }
 
@@ -78,10 +93,10 @@ public class Percolation {
 
     public boolean isFull(int i, int j) {
         validateIdx(i,j);
-        return uf.connected(tolinear(i-1,j-1), this.topidx);
+        return isConnectedToTop(i,j);
     }
 
     public boolean percolates() {
-        return uf.connected(this.topidx, this.bottomidx);
+        return this.ispercolating;
     }
 }
