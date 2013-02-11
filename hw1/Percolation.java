@@ -65,9 +65,6 @@ public class Percolation {
             tuf.union(tolinear(i-1,j-1), tolinear(x-1,y-1));
             buf.union(tolinear(i-1,j-1), tolinear(x-1,y-1));
         }
-        if(!this.ispercolating && isConnectedToBottom(i,j) && isConnectedToTop(i,j)){
-            this.ispercolating = true;
-        }
     }
 
     public void open(int i, int j) {
@@ -83,6 +80,9 @@ public class Percolation {
         }
         if (i==this.size) {
             connectToBottom(i,j);
+        }
+        if(!this.ispercolating && isConnectedToBottom(i,j) && isConnectedToTop(i,j)){
+            this.ispercolating = true;
         }
     }
 
