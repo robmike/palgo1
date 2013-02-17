@@ -36,20 +36,24 @@ public class Deque<Item> implements Iterable<Item> {
 
     public void insertBefore(Item item, Node h) {
         Node node = new Node();
+        h.prev.next = node;
         node.prev = h.prev;
         node.next = h;
         node.item = item;
         h.prev = node;
         head = pre.next;
+        tail = post.prev;
         nitems++;
     }
 
     public void insertAfter(Item item, Node h) {
         Node node = new Node();
+        h.next.prev = node;
         node.prev = h;
         node.next = h.next;
         node.item = item;
         h.next = node;
+        head = pre.next;
         tail = post.prev;
         nitems++;
     }
