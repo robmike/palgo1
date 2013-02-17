@@ -34,7 +34,7 @@ public class Deque<Item> implements Iterable<Item> {
         return this.nitems;
     }
 
-    public void insertBefore(Item item, Node h) {
+    private void insertBefore(Item item, Node h) {
         Node node = new Node();
         h.prev.next = node;
         node.prev = h.prev;
@@ -46,7 +46,7 @@ public class Deque<Item> implements Iterable<Item> {
         nitems++;
     }
 
-    public void insertAfter(Item item, Node h) {
+    private void insertAfter(Item item, Node h) {
         Node node = new Node();
         h.next.prev = node;
         node.prev = h;
@@ -66,7 +66,7 @@ public class Deque<Item> implements Iterable<Item> {
         insertAfter(item, tail);
     }
 
-    public Item remove(Node n){
+    private Item remove(Node n){
         if(nitems == 0) {
             throw new NoSuchElementException();
         }
