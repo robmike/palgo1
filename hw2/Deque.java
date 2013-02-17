@@ -1,15 +1,30 @@
 import java.util.Iterator;
+import java.lang.UnsupportedOperationException;
+import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {
-    private Item[] array;
     private int nitems;
-    private int head;
-    private int tail;
+    private Node head;
+    private Node tail;
+    private Node pre;
+    private Node post;
+
     public Deque(){                      // construct an empty deque
-        this.array = (Item[]) new Object[10];
-        this.head = 0;
-        this.tail = 0;
+        pre = new Node();
+        post = new Node();
+        pre.prev = pre;
+        pre.next = post;
+        post.prev = pre;
+        post.next = post;
+        head = post; 
+        tail = pre;
         this.nitems = 0;
+    }
+
+    private class Node {
+        Node next;
+        Node prev;
+        Item item;
     }
 
     public boolean isEmpty() {           // is the deque empty?
@@ -18,59 +33,53 @@ public class Deque<Item> implements Iterable<Item> {
     public int size(){ // return the number of items on the deque
         return this.nitems;
     }
-    
-    private void resize(int newsize){
-        Item[] oldarray = array;
-        array = (Item[]) new Object[newsize];
-        int i = 0;
-        while(head != tail){
-            array[i] = oldarray[head];
-            i++;
-            head = (head + 1) % array.length;
-        }
-        array[i] = oldarray[tail];
-        head = 0;
-        tail = nitems-1;
+
+    public void insertBefore(Item item, Node h) {
+        Node node = new Node();
+        node.prev = h.prev;
+        node.next = h;
+        node.item = item;
+        h.prev = node;
+        head = pre.next;
+        nitems++;
     }
 
-    private void incsize(){
-        if(this.nitems == this.array.length) {
-            this.resize(2*this.array.length);
-        }
-        this.nitems++;
-    }
-
-    private void decsize(){
-        if(this.nitems == this.array.length/4){
-            this.resize(this.array.length/2);
-        }
+    public void insertAfter(Item item, Node h) {
+        Node node = new Node();
+        node.prev = h;
+        node.next = h.next;
+        node.item = item;
+        h.next = node;
+        tail = post.prev;
+        nitems++;
     }
 
     public void addFirst(Item item){    // insert the item at the front
-        incsize();
-        this.head = (this.head - 1) % this.array.length;
-        this.array[this.head] = item;
+        insertBefore(item, head);
     }
 
     public void addLast(Item item) {     // insert the item at the end
-        incsize();
-        this.tail = (this.tail + 1) % this.array.length;
-        this.array[this.tail] = item;
+        insertAfter(item, tail);
+    }
+
+    public Item remove(Node n){
+        if(nitems == 0) {
+            throw new NoSuchElementException();
+        }
+        n.prev.next = n.next;
+        n.next.prev = n.prev;
+        head = pre.next;
+        tail = post.prev;
+        Item item = n.item;
+        return item;
     }
 
     public Item removeFirst(){          // delete and return the item at the front
-        Item item = this.array[head];
-        this.array[head] = null;
-        head = (head + 1) % array.length;
-        decsize();
-        return item;
+        return remove(head);
     }
-    public Item removeLast(){           // delete and return the item at the end
-        Item item = this.array[tail];
-        this.array[tail] = null;
-        tail = (tail - 1) % array.length;
-        decsize();
-        return item;
+
+    public Item removeLast(){           // delete and return the item at the end 
+        return remove(tail);
     }
 
     public Iterator<Item> iterator(){   // return an iterator over items in order from front to end
@@ -78,19 +87,23 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     private class DequeIterator implements Iterator<Item> {
-        private int idx;
+        private Node idx;
         public DequeIterator(){
             idx = head;
         }
 
-        public void remove() {};
+        public void remove() { throw new UnsupportedOperationException(); };
 
         public boolean hasNext(){
-            return idx != tail;
+            return nitems > 0 && idx != tail;
         }
+
         public Item next(){
-            Item item = array[idx];
-            idx = (idx + 1) % array.length;
+            if(!hasNext()){
+                throw new NoSuchElementException();
+            }
+            Item item = idx.item;
+            idx = idx.next;
             return item;
         }
     }
