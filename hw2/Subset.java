@@ -3,25 +3,27 @@ import java.util.*;
 import java.io.*;
 
 public class Subset {
+
     private String[] a;
     private int nitems;
+
 
     public Subset(int k){
         a = new String[k];
         nitems = 0;
     }
     
-    public String toString() {
+    private String pretty() {
         StringBuilder sb = new StringBuilder(a.length*16);
         for(int i=0; i<a.length; i++){
             sb.append(a[i]);
-            sb.append(" ");
+            sb.append("\n");
         }
-        sb.append("\n");
+        // sb.append("\n");
         return sb.toString();
     }
     
-    public void push(String s) {
+    private void push(String s) {
         if(nitems < a.length){
             a[nitems] = s;
         } 
@@ -44,6 +46,6 @@ public class Subset {
         while(tokenizer.hasMoreTokens()) {
             ss.push(tokenizer.nextToken());
         }
-        System.out.println(ss);
+        System.out.println(ss.pretty());
     }
 }
