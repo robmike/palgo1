@@ -1,27 +1,38 @@
-public class RandomizedQueue<Item> extends Deque<Item> {
-    private Node[] array;
-    private int arhead;
-    private int artail;
+import java.util.Iterator;
+import java.lang.UnsupportedOperationException;
+import java.util.NoSuchElementException;
 
+public class RandomizedQueue<Item> implements Iterable<Item> {
+    private Item[] array;
+    private int nitems;
+    private int head;
+    private int tail;
     public RandomizedQueue(){                      // construct an empty deque
-        super();
-        this.array = new Node[10];
-        arhead = 0;
-        artail = 0;
+        this.array = (Item[]) new Object[10];
+        this.head = 0;
+        this.tail = 0;
+        this.nitems = 0;
     }
 
+    public boolean isEmpty() {           // is the deque empty?
+        return size() == 0;
+    }
+    public int size(){ // return the number of items on the deque
+        return this.nitems;
+    }
+    
     private void resize(int newsize){
-        Node[] oldarray = array;
-        array = new Node[newsize];
+        Item[] oldarray = array;
+        array = (Item[]) new Object[newsize];
         int i = 0;
-        while(arhead != artail){
-            array[i] = oldarray[arhead];
+        while(head != tail){
+            array[i] = oldarray[head];
             i++;
-            arhead = (arhead + 1) % array.length;
+            head = (head + 1) % array.length;
         }
         array[i] = oldarray[tail];
-        arhead = 0;
-        artail = nitems-1;
+        head = 0;
+        tail = nitems-1;
     }
 
     private void incsize(){
@@ -43,48 +54,44 @@ public class RandomizedQueue<Item> extends Deque<Item> {
         this.array[this.tail] = item;
     }
 
-    public Item removeFirst(){          // delete and return the item at the front
-        if(nitems == 0) { return new NoSuchElementException(); }
-        Item item = this.array[head];
-        this.array[head] = null;
-        head = (head + 1) % array.length;
-        decsize();
+    public Item dequeue(){          // delete and return the item at the front
+        if(nitems == 0) { throw new NoSuchElementException(); }
+        int ridx = StdRandom.uniform(nitems);
+        Item item = array[ridx];
+        array[ridx] = removeLast();
         return item;
     }
-    public Item removeLast(){           // delete and return the item at the end
-        if(nitems == 0) { return new NoSuchElementException(); }
-        Item item = this.array[tail];
-        this.array[tail] = null;
+
+    public Item sample(){          // delete and return the item at the front
+        if(nitems == 0) { throw new NoSuchElementException(); }
+        int ridx = StdRandom.uniform(nitems);
+        Item item = array[ridx];
+        return item;
+    }
+
+    private Item removeLast(){           // delete and return the item at the end
+        if(nitems == 0) { throw new NoSuchElementException(); }
+        Item item = array[tail];
+        array[tail] = null;
         tail = (tail - 1) % array.length;
         decsize();
         return item;
     }
 
     public Iterator<Item> iterator(){   // return an iterator over items in order from front to end
-        return new DequeIterator();
+        return new RandomizedQueueIterator();
     }
 
-    private class DequeIterator implements Iterator<Item> {
-        private int idx;
-        public DequeIterator(){
-            idx = head;
-        }
-
-        public void remove() {};
-
-        public boolean hasNext(){
-            return idx != tail;
-        }
+    private class RandomizedQueueIterator implements Iterator<Item> {
 
         public void remove() { throw new UnsupportedOperationException(); };
 
-        public Item next(){
-            if(!hasNext()){
-                throw new NoSuchElementException();
-            }
-            Item item = array[idx];
-            idx = (idx + 1) % array.length;
-            return item;
+        public boolean hasNext(){
+            return !isEmpty();
+        }
+
+         public Item next(){
+            return sample();
         }
     }
 }
