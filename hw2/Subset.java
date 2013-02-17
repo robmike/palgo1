@@ -35,11 +35,16 @@ public class Subset {
         int nitems=0;
         String[] a = new String[k];
 
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        String input = bufferedReader.readLine(); // FIXME: Read 1 token at a time
-        StringTokenizer tokenizer = new StringTokenizer(input, " ");
-        while(tokenizer.hasMoreTokens()) {
-            push(a, tokenizer.nextToken(), nitems++);
+        String input = StdIn.readString();
+
+        while(true){
+            try{
+                push(a, input, nitems++);
+                input = StdIn.readString();
+            }
+            catch(NoSuchElementException e){
+                break;
+            }
         }
         System.out.print(pretty(a));
     }
