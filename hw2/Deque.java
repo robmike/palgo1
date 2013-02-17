@@ -35,6 +35,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     private void insertBefore(Item item, Node h) {
+        if(null == item) { throw new NullPointerException();}
         Node node = new Node();
         h.prev.next = node;
         node.prev = h.prev;
@@ -47,6 +48,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     private void insertAfter(Item item, Node h) {
+        if(null == item) { throw new NullPointerException();}
         Node node = new Node();
         h.next.prev = node;
         node.prev = h;
@@ -75,6 +77,7 @@ public class Deque<Item> implements Iterable<Item> {
         head = pre.next;
         tail = post.prev;
         Item item = n.item;
+        nitems--;
         return item;
     }
 
@@ -99,7 +102,7 @@ public class Deque<Item> implements Iterable<Item> {
         public void remove() { throw new UnsupportedOperationException(); };
 
         public boolean hasNext(){
-            return nitems > 0 && idx != tail;
+            return nitems > 0 && idx != post;
         }
 
         public Item next(){
