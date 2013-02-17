@@ -4,16 +4,10 @@ import java.io.*;
 
 public class Subset {
 
-    private String[] a;
-    private int nitems;
-
-
-    public Subset(int k){
-        a = new String[k];
-        nitems = 0;
+    public Subset(){
     }
     
-    private String pretty() {
+    private static String pretty(String[] a) {
         StringBuilder sb = new StringBuilder(a.length*16);
         for(int i=0; i<a.length; i++){
             sb.append(a[i]);
@@ -23,29 +17,30 @@ public class Subset {
         return sb.toString();
     }
     
-    private void push(String s) {
+    private static void push(String[] a, String s, int nitems) {
         if(nitems < a.length){
             a[nitems] = s;
         } 
         else {                  // reservoir sampling
-            if(StdRandom.random() < (float) a.length/nitems){
+            if(StdRandom.random() < (float) a.length/(nitems+1)){
                 int ridx = StdRandom.uniform(a.length);
                 a[ridx] = s;
             }
         }
-        nitems++;
     }
 
     public static void main(String[] args) throws IOException {
         StdRandom.setSeed(0);
         int k = Integer.parseInt(args[0]);
-        Subset ss = new Subset(k);
+        int nitems=0;
+        String[] a = new String[k];
+
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         String input = bufferedReader.readLine(); // FIXME: Read 1 token at a time
         StringTokenizer tokenizer = new StringTokenizer(input, " ");
         while(tokenizer.hasMoreTokens()) {
-            ss.push(tokenizer.nextToken());
+            push(a, tokenizer.nextToken(), nitems++);
         }
-        System.out.println(ss.pretty());
+        System.out.print(pretty(a));
     }
 }
