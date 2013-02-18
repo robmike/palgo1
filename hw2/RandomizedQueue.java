@@ -76,8 +76,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if(nitems == 0) { throw new NoSuchElementException(); }
         int ridx = StdRandom.uniform(nitems);
         Item item = array[ridx];
-        if(ridx != nitems - 1){
-            Item last = removeLast(); // move last to fill hole
+        if(ridx != nitems - 1){ // move last to fill hole
+            // array[ridx] = removeLast(); // This doesn't work (why?) Mutating LHS when assigning to it?
+            Item last = removeLast();
             array[ridx] = last;
         }
         else {
