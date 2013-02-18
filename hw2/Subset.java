@@ -30,7 +30,6 @@ public class Subset {
     }
 
     public static void main(String[] args) throws IOException {
-        StdRandom.setSeed(0);
         int k = Integer.parseInt(args[0]);
         int nitems=0;
         String[] a = new String[k];
