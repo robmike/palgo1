@@ -19,6 +19,23 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return this.nitems;
     }
 
+    private void pretty(){
+        System.out.print("nitems: ");
+        System.out.println(nitems);
+        System.out.print("array.length: ");
+        System.out.println(array.length);
+        for(Item i : this){
+            System.out.print(i);
+            System.out.print(" ");
+        }
+        System.out.println("");
+        for(int i=0; i<nitems; i++){
+            System.out.print(array[i]);
+            System.out.print(" ");
+        }
+        System.out.println("");
+    }
+
     private Item[] arrayCopy(){
         Item[] narr = (Item[]) new Object[nitems];
         for(int i=0; i<nitems; i++){
@@ -50,6 +67,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     public void enqueue(Item item) {     // insert the item at the end
+        if(null == item) { throw new NullPointerException();}
         incsize(); 
         array[nitems-1] = item;
     }
@@ -58,7 +76,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if(nitems == 0) { throw new NoSuchElementException(); }
         int ridx = StdRandom.uniform(nitems);
         Item item = array[ridx];
-        array[ridx] = removeLast(); // move last to fill hole
+        if(ridx != nitems - 1){
+            Item last = removeLast(); // move last to fill hole
+            array[ridx] = last;
+        }
+        else {
+            removeLast();
+        }
         return item;
     }
 
