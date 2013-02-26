@@ -15,15 +15,20 @@ import java.util.Comparator;
 public class Point implements Comparable<Point> {
 
     // compare points by slope
-    public final Comparator<Point> SLOPE_ORDER = new BySlope();       // YOUR DEFINITION HERE
-    private static class BySlope implements Comparator<Point> {
-        public int compare(Point u, Point v) {
-            return u.compareTo(v);
-        }
-    }
-
+    public final Comparator<Point> SLOPE_ORDER = new RelativeSlope();
     private final int x;                              // x coordinate
     private final int y;                              // y coordinate
+
+    private class RelativeSlope implements Comparator<Point> {
+        public int compare(Point u, Point v) {
+            if( u.x == v.x && u.y == v.y ) return 0;
+            double ds = slopeTo(u) - slopeTo(v); // fixme: is ordering preserved?
+            if(ds == 0) return 0;
+            if(ds < 0) return -1;
+            return 1;
+            //return (int) Math.round(slopeTo(v) - slopeTo(u)); // fixme: is ordering preserved?
+        }
+    }
 
     // create the point (x, y)
     public Point(int x, int y) {
