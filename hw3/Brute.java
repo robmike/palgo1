@@ -20,39 +20,27 @@ public class Brute {
             for(int j=i+1; j<n-2; j++) {
                 for(int k=j+1; k<n-1; k++) {
                     for(int l=k+1; l<n; l++) {
-                        if(Math.abs(pts[i].slopeTo(pts[j])) == Math.abs(pts[j].slopeTo(pts[k])) &&
-                           Math.abs(pts[k].slopeTo(pts[l])) == Math.abs(pts[j].slopeTo(pts[k]))) {
+                        Point[] sp = new Point[4];
+                        sp[0] = pts[i];
+                        sp[1] = pts[j];
+                        sp[2] = pts[k];
+                        sp[3] = pts[l];
+                        Arrays.sort(sp);
+                        if((sp[0].slopeTo(sp[1])) == (sp[1].slopeTo(sp[2])) &&
+                           (sp[2].slopeTo(sp[3])) == (sp[1].slopeTo(sp[2]))) {
                             System.out.println("found match");
-                            System.out.println(i);
-                            System.out.println(j);
-                            System.out.println(k);
-                            System.out.println(l);
-                            System.out.println(Math.abs(pts[i].slopeTo(pts[j])));
-                            System.out.println(Math.abs(pts[j].slopeTo(pts[k])));
-                            Point first = pts[i];
-                            Point last = pts[l];
-                            for(int m=0; m<n; m++) {
-                                if(pts[firem].slopeTo(pts[i]) >= 0 &&
-                                   pts[m].slopeTo(pts[j]) >= 0 &&
-                                   pts[m].slopeTo(pts[k]) >= 0 &&
-                                   pts[m].slopeTo(pts[l]) >= 0) {
-                                    first = pts[m];
-                                    System.out.println("first");
-                                    System.out.println(first);
-                                    break;
-                                }
-                            }
-                            for(int m=0; m<n; m++) {
-                                if(pts[i].slopeTo(pts[m]) <= 0 &&
-                                   pts[j].slopeTo(pts[m]) <= 0 &&
-                                   pts[k].slopeTo(pts[m]) <= 0 &&
-                                   pts[l].slopeTo(pts[m]) <= 0) {
-                                    last = pts[m];
-                                    System.out.println("last");
-                                    System.out.println(last);
-                                    break;
-                                }
-                            }
+
+                            System.out.println(sp[0]);
+                            System.out.println(sp[1]);
+                            System.out.println(sp[2]);
+                            System.out.println(sp[3]);
+                            System.out.println((sp[0].slopeTo(sp[1])));
+                            System.out.println((sp[1].slopeTo(sp[2])));
+                            System.out.println((sp[2].slopeTo(sp[3])));
+
+                            Point first = sp[0];
+                            Point last = sp[3];
+
                             first.drawTo(last);
                             StdDraw.show(0);
                         }
