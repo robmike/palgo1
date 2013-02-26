@@ -11,6 +11,7 @@
  *************************************************************************/
 
 import java.util.Comparator;
+import java.lang.NullPointerException;
 
 public class Point implements Comparable<Point> {
 
@@ -21,6 +22,8 @@ public class Point implements Comparable<Point> {
 
     private class RelativeSlope implements Comparator<Point> {
         public int compare(Point u, Point v) {
+            if(v == null) { throw new NullPointerException();}
+            if(u == null) { throw new NullPointerException();}
             if( u.x == v.x && u.y == v.y ) return 0;
             double ds = slopeTo(u) - slopeTo(v); // fixme: is ordering preserved?
             if(ds == 0) return 0;
@@ -52,6 +55,7 @@ public class Point implements Comparable<Point> {
     // slope between this point and that point
     public double slopeTo(Point that) {
         /* YOUR CODE HERE */
+        if(that == null) { throw new NullPointerException();}
         if(this == that) return Double.NEGATIVE_INFINITY;
         if(this.x == that.x) return Double.POSITIVE_INFINITY;
         if(this.y == that.y) return 0.0;

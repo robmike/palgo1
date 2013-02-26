@@ -22,11 +22,14 @@ public class Fast {
         }
         StdDraw.show(0);
 
-        for(int i=0; i<n; i++) {
-            Point[] p = (Point[])pts.clone();
+        for(int i=0; i<n-3; i++) {
+            Point[] p = new Point[n-i-1];
+            for(int j = i+1; j<n; j++) {
+                p[j-i-1] = pts[j];
+            }
             Arrays.sort(p, pts[i].SLOPE_ORDER);
             int count = 0;
-            double prev = pts[i].slopeTo(p[1]);
+            double prev = pts[i].slopeTo(p[0]);
             double slope;
             // System.out.println("point i");
             // System.out.println(pts[i]);
@@ -35,19 +38,19 @@ public class Fast {
             //     System.out.println(pts[i].slopeTo(p[k]));
             // }
 
-            for(int j=2; j<n; j++) {
+            for(int j=1; j<n-i-1; j++) {
                 slope = pts[i].slopeTo(p[j]);
-                System.out.println("prev slope");
-                System.out.println(prev);
-                System.out.println(slope);
+                // System.out.println("prev slope");
+                // System.out.println(prev);
+                // System.out.println(slope);
                 if (slope == prev){
                     count++;
                     if (count == 2) {
-                    System.out.println("count == 2");
-                    System.out.println(pts[i]);
-                    System.out.print(p[j]);System.out.println(pts[i].slopeTo(p[j]));
-                    System.out.print(p[j-1]);System.out.println(pts[i].slopeTo(p[j-1]));
-                    System.out.print(p[j-2]);System.out.println(pts[i].slopeTo(p[j-2]));
+                    // System.out.println("count == 2");
+                    // System.out.println(pts[i]);
+                    // System.out.print(p[j]);System.out.println(pts[i].slopeTo(p[j]));
+                    // System.out.print(p[j-1]);System.out.println(pts[i].slopeTo(p[j-1]));
+                    // System.out.print(p[j-2]);System.out.println(pts[i].slopeTo(p[j-2]));
 
                         count = 0;
                         Point[] sp = new Point[4];
@@ -61,7 +64,11 @@ public class Fast {
                         Point last = sp[3];
 
                         first.drawTo(last);
-                        StdDraw.show(0);
+                        System.out.print(sp[0]); System.out.print(" -> ");
+                        System.out.print(sp[1]); System.out.print(" -> ");
+                        System.out.print(sp[2]); System.out.print(" -> ");
+                        System.out.print(sp[3]); System.out.println();
+                        //StdDraw.show(0);
                     }
                 } else {
                     count = 0;
@@ -69,5 +76,6 @@ public class Fast {
                 prev = slope;
             }
         }
+        StdDraw.show(0);
     }
 }
