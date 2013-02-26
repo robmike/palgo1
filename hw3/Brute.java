@@ -16,6 +16,11 @@ public class Brute {
         StdDraw.setYscale(0, 32768);
         StdDraw.show(0);
 
+        for(int i=0; i<n; i++){
+            pts[i].draw();
+        }
+        StdDraw.show(0);
+
         for(int i=0; i<n-3; i++) { // This is horrible
             for(int j=i+1; j<n-2; j++) {
                 for(int k=j+1; k<n-1; k++) {
